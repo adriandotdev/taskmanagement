@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collection;
 import java.util.List;
 
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class UserDetail implements org.springframework.security.core.userdetails.UserDetails {
 
     private final String givenName;
     private final String middleName;
@@ -21,7 +21,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
         USER
     }
 
-    private UserDetails(UserRegisterDetailsBuilder builder) {
+    private UserDetail(UserRegisterDetailsBuilder builder) {
         this.givenName = builder.givenName;
         this.middleName = builder.middleName;
         this.lastName = builder.lastName;
@@ -137,12 +137,12 @@ public class UserDetails implements org.springframework.security.core.userdetail
             return this;
         }
 
-        public UserDetails build() {
+        public UserDetail build() {
             if (this.givenName.isEmpty()) throw new HttpBadRequest("UserRegisterDetails instance cannot be build because givenName is empty");
 
             if (this.lastName.isEmpty()) throw new HttpBadRequest("UserRegisterDetails instance cannot be build because lastName is empty");
 
-            return new UserDetails(this);
+            return new UserDetail(this);
         }
     }
 }

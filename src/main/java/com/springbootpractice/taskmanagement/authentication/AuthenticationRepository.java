@@ -1,7 +1,7 @@
 package com.springbootpractice.taskmanagement.authentication;
 
-import com.springbootpractice.taskmanagement.config.UserDetail;
-import com.springbootpractice.taskmanagement.config.UserDetailService;
+import com.springbootpractice.taskmanagement.config.basicauth.BasicUserDetail;
+import com.springbootpractice.taskmanagement.config.jwtauth.UserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,5 +48,29 @@ public class AuthenticationRepository {
         }
 
         return Optional.empty();
+    }
+
+    public Optional<BasicUserDetail> getBasicTokenByUsername(String username) {
+        String query = "SELECT username, password FROM tokens WHERE username = ?";
+
+        RowMapper<BasicUserDetail> mapper = (ResultSet rs, int index) ->
+            new BasicUserDetail
+                    .BasicUserDetailBuilder()
+                    .setUsername(rs.getString("username"))
+                    .setPassword(rs.getString("password"))
+                    .build();
+
+        try {
+            BasicUserDetail basicUserDetail = this.template.queryForObject(query, mapper, username);
+
+            if (basicUserDetail != null) {
+                return Optional.of(basicUserDetail);
+            }
+
+            return Optional.empty();
+        }
+        catch (DataAccessException e) {
+            return Optional.empty();
+        }
     }
 }

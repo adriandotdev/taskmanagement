@@ -1,7 +1,7 @@
 package com.springbootpractice.taskmanagement.authentication;
 
-import com.springbootpractice.taskmanagement.config.JwtService;
-import com.springbootpractice.taskmanagement.config.UserDetail;
+import com.springbootpractice.taskmanagement.config.jwtauth.JwtService;
+import com.springbootpractice.taskmanagement.config.jwtauth.UserDetail;
 import com.springbootpractice.taskmanagement.utils.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

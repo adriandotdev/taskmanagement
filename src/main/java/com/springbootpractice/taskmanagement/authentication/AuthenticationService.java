@@ -1,10 +1,9 @@
 package com.springbootpractice.taskmanagement.authentication;
 
-import com.springbootpractice.taskmanagement.config.UserDetail;
+import com.springbootpractice.taskmanagement.config.jwtauth.UserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.springbootpractice.taskmanagement.authentication.RegisterRequest;
 
 import java.util.Optional;
 

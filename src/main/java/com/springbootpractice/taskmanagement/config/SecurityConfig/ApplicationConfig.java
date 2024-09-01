@@ -1,6 +1,6 @@
 package com.springbootpractice.taskmanagement.config.SecurityConfig;
 
-import com.springbootpractice.taskmanagement.config.jwtauth.UserDetailService;
+import com.springbootpractice.taskmanagement.config.jwtauth.JwtUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     @Autowired
-    private UserDetailService userDetailService;
+    private JwtUserDetailService jwtUserDetailService;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailService);
+        provider.setUserDetailsService(jwtUserDetailService);
         return provider;
     }
 

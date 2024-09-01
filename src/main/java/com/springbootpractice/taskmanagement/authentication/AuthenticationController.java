@@ -1,7 +1,7 @@
 package com.springbootpractice.taskmanagement.authentication;
 
 import com.springbootpractice.taskmanagement.config.jwtauth.JwtService;
-import com.springbootpractice.taskmanagement.config.jwtauth.UserDetail;
+import com.springbootpractice.taskmanagement.config.jwtauth.JwtUserDetail;
 import com.springbootpractice.taskmanagement.utils.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<CustomResponse<?>> login(@RequestBody LoginRequest request) {
 
-        UserDetail user = this.service.getUserByUsername(request.username()).orElseThrow(() -> new RuntimeException("Not Found"));
+        JwtUserDetail user = this.service.getUserByUsername(request.username()).orElseThrow(() -> new RuntimeException("Not Found"));
 
         String token = jwtService.generateToken(user);
 

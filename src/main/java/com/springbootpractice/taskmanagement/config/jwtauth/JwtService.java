@@ -19,13 +19,13 @@ public class JwtService {
     @Value("${taskmanager.jwt.issuer}")
     private String ISSUER;
 
-    public boolean isTokenValid(UserDetail user, String token) {
+    public boolean isTokenValid(JwtUserDetail user, String token) {
 
         return (user.getUsername().equals(extractUsername(token)))
                 && getExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetail user) {
+    public String generateToken(JwtUserDetail user) {
         return Jwts
                 .builder()
                 .setSubject(user.getUsername())

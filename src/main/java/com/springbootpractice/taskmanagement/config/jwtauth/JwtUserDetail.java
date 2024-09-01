@@ -7,18 +7,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collection;
 import java.util.List;
 
-public class UserDetail implements org.springframework.security.core.userdetails.UserDetails {
+public class JwtUserDetail implements org.springframework.security.core.userdetails.UserDetails {
 
     private final String username;
     private final String password;
-    private final UserDetail.ROLES role;
+    private final JwtUserDetail.ROLES role;
 
     public static enum ROLES {
         ADMIN,
         USER
     }
 
-    private UserDetail(UserDetailBuilder builder) {
+    private JwtUserDetail(UserDetailBuilder builder) {
         this.username = builder.username;
         this.password = builder.password;
         this.role = builder.role;
@@ -67,7 +67,7 @@ public class UserDetail implements org.springframework.security.core.userdetails
 
         private String username;
         private String password;
-        private UserDetail.ROLES role;
+        private JwtUserDetail.ROLES role;
 
         public UserDetailBuilder setUsername(String username) {
             if (username.isEmpty()) throw new HttpBadRequest("Username must not be empty");
@@ -85,19 +85,19 @@ public class UserDetail implements org.springframework.security.core.userdetails
             return this;
         }
 
-        public UserDetailBuilder setRole(UserDetail.ROLES role) {
+        public UserDetailBuilder setRole(JwtUserDetail.ROLES role) {
 
             this.role = role;
 
             return this;
         }
 
-        public UserDetail build() {
+        public JwtUserDetail build() {
             if (this.username.isEmpty()) throw new HttpBadRequest("UserRegisterDetails instance cannot be build because givenName is empty");
 
             if (this.password.isEmpty()) throw new HttpBadRequest("UserRegisterDetails instance cannot be build because lastName is empty");
 
-            return new UserDetail(this);
+            return new JwtUserDetail(this);
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.springbootpractice.taskmanagement.config.basicauth;
 
-import com.springbootpractice.taskmanagement.config.jwtauth.UserDetail;
-import com.springbootpractice.taskmanagement.config.jwtauth.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

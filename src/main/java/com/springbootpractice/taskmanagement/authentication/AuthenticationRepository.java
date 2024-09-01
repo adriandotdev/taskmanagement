@@ -1,7 +1,7 @@
 package com.springbootpractice.taskmanagement.authentication;
 
 import com.springbootpractice.taskmanagement.config.basicauth.BasicUserDetail;
-import com.springbootpractice.taskmanagement.config.jwtauth.UserDetail;
+import com.springbootpractice.taskmanagement.config.jwtauth.JwtUserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,31 +17,31 @@ public class AuthenticationRepository {
     @Autowired
     private JdbcTemplate template;
 
-    public void register(UserDetail userDetail) {
+    public void register(JwtUserDetail jwtUserDetail) {
 
         final String query = "INSERT INTO users (username, password, role) VALUES (?,?,?)";
 
-        this.template.update(query, userDetail.getUsername(), userDetail.getPassword(), userDetail.getRole());
+        this.template.update(query, jwtUserDetail.getUsername(), jwtUserDetail.getPassword(), jwtUserDetail.getRole());
     }
 
-    public Optional<UserDetail> getUserByUsername(String username) {
+    public Optional<JwtUserDetail> getUserByUsername(String username) {
 
         String query = "SELECT username, password, role FROM users WHERE username = ?";
 
-        RowMapper<UserDetail> map = (ResultSet rs, int index) ->
+        RowMapper<JwtUserDetail> map = (ResultSet rs, int index) ->
 
-            new UserDetail.UserDetailBuilder()
+            new JwtUserDetail.UserDetailBuilder()
                     .setUsername(rs.getString("username"))
                     .setPassword(rs.getString("password"))
-                    .setRole(UserDetail.ROLES.valueOf(rs.getString("role")))
+                    .setRole(JwtUserDetail.ROLES.valueOf(rs.getString("role")))
                     .build();
         ;
 
         try {
-            UserDetail userDetail = this.template.queryForObject(query, map, username);
+            JwtUserDetail jwtUserDetail = this.template.queryForObject(query, map, username);
 
-            if (userDetail != null)
-                return Optional.of(userDetail);
+            if (jwtUserDetail != null)
+                return Optional.of(jwtUserDetail);
         }
         catch(DataAccessException e) {
             return Optional.empty();

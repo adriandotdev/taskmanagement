@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .httpBasic(httpBasicConfigurer -> {
                     httpBasicConfigurer.authenticationEntryPoint(new BasicAuthEntryPoint());
                 })
+                .exceptionHandling(handler -> handler.authenticationEntryPoint(new BasicAuthEntryPoint()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(basicAuthenticationProvider);
 

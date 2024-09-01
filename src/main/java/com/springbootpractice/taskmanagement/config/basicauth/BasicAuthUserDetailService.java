@@ -18,6 +18,6 @@ public class BasicAuthUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.authenticationRepository.getBasicTokenByUsername(username).orElseThrow(() -> new HttpUnauthorized("INVALID_BASIC_TOKEN"));
+        return this.authenticationRepository.getBasicTokenByUsername(username).orElseThrow(() -> new UsernameNotFoundException("USERNAME NOT FOUND"));
     }
 }

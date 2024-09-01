@@ -4,6 +4,7 @@ import com.springbootpractice.taskmanagement.config.JwtService;
 import com.springbootpractice.taskmanagement.config.UserDetail;
 import com.springbootpractice.taskmanagement.utils.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ public class AuthenticationController {
 
         this.service.register(request);
 
-        return ResponseEntity.ok(new CustomResponse<>("Created", List.of(), "Success"));
+        return new ResponseEntity<>(new CustomResponse<>("Created", List.of(), "Success"), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

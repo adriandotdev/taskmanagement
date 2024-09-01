@@ -1,4 +1,4 @@
-package com.springbootpractice.taskmanagement.config.SecurityConfig;
+package com.springbootpractice.taskmanagement.config.basicauth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

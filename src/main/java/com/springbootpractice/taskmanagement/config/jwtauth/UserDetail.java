@@ -1,4 +1,4 @@
-package com.springbootpractice.taskmanagement.config;
+package com.springbootpractice.taskmanagement.config.jwtauth;
 
 import com.springbootpractice.taskmanagement.utils.HttpBadRequest;
 import org.springframework.security.core.GrantedAuthority;

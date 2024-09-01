@@ -1,4 +1,4 @@
-package com.springbootpractice.taskmanagement.config;
+package com.springbootpractice.taskmanagement.config.jwtauth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

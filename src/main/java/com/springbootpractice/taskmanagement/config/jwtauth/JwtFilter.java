@@ -1,8 +1,5 @@
-package com.springbootpractice.taskmanagement.config.SecurityConfig;
+package com.springbootpractice.taskmanagement.config.jwtauth;
 
-import com.springbootpractice.taskmanagement.config.JwtService;
-import com.springbootpractice.taskmanagement.config.UserDetail;
-import com.springbootpractice.taskmanagement.config.UserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

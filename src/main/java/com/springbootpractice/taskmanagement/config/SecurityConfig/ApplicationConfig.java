@@ -1,5 +1,6 @@
-package com.springbootpractice.taskmanagement.config;
+package com.springbootpractice.taskmanagement.config.SecurityConfig;
 
+import com.springbootpractice.taskmanagement.config.jwtauth.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

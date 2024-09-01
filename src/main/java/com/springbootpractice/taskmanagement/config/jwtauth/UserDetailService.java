@@ -1,4 +1,4 @@
-package com.springbootpractice.taskmanagement.config;
+package com.springbootpractice.taskmanagement.config.jwtauth;
 
 import com.springbootpractice.taskmanagement.authentication.AuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,13 @@
 package com.springbootpractice.taskmanagement.config.jwtauth;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -40,7 +42,17 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String username = jwtService.extractUsername(token);
+        String username = "";
+
+        try {
+            username = jwtService.extractUsername(token);
+        }
+        catch(ExpiredJwtException err) {
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "JWT_TOKEN_EXPIRED");
+        }
+        catch (Exception e) {
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "INVALID_TOKEN");
+        }
 
         if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() != null) {
 

@@ -1,5 +1,6 @@
 package com.springbootpractice.taskmanagement.config.basicauth;
 
+import com.springbootpractice.taskmanagement.utils.HttpUnauthorized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,12 +17,13 @@ public class BasicAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        try{
+
+        try {
             BasicUserDetail userDetails = (BasicUserDetail) userDetailService.loadUserByUsername(authentication.getName());
-            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(),userDetails.getPassword(),userDetails.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
         }
-        catch (UsernameNotFoundException e) {
-            throw new BadCredentialsException("Invalid Credentials");
+        catch(HttpUnauthorized e) {
+            throw new BadCredentialsException(e.getMessage());
         }
     }
 

@@ -1,7 +1,12 @@
 package com.springbootpractice.taskmanagement.authentication;
 
+import com.springbootpractice.taskmanagement.config.jwtauth.JwtService;
 import com.springbootpractice.taskmanagement.config.jwtauth.JwtUserDetail;
+import com.springbootpractice.taskmanagement.utils.HttpUnauthorized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +21,9 @@ public class AuthenticationService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtService jwtService;
+
     public void register(RegisterRequest request) {
 
         JwtUserDetail jwtUserDetail = new JwtUserDetail.UserDetailBuilder()
@@ -27,8 +35,10 @@ public class AuthenticationService {
         this.repository.register(jwtUserDetail);
     }
 
-    public Optional<JwtUserDetail> getUserByUsername(String username) {
+    public String login(LoginRequest request) {
 
-        return this.repository.getUserByUsername(username);
+        JwtUserDetail jwtUserDetail = this.repository.getUserByUsername(request.username()).orElseThrow(() -> new BadCredentialsException("INVALID_CREDENTIALS"));
+
+        return jwtService.generateToken(jwtUserDetail);
     }
 }

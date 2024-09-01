@@ -17,6 +17,13 @@ public class AuthenticationRepository {
     @Autowired
     private JdbcTemplate template;
 
+    public void register(UserDetail userDetail) {
+
+        final String query = "INSERT INTO users (username, password, role) VALUES (?,?,?)";
+
+        this.template.update(query, userDetail.getUsername(), userDetail.getPassword(), userDetail.getRole());
+    }
+
     public Optional<UserDetail> getUserByUsername(String username) {
 
         String query = "SELECT username, password, role FROM users WHERE username = ?";

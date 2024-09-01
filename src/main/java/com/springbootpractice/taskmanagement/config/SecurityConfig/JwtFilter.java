@@ -40,6 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (!type.equals("Bearer") || authHeader.isEmpty() || token.isEmpty()) {
 
             filterChain.doFilter(request, response);
+            return;
         }
 
         String username = jwtService.extractUsername(token);

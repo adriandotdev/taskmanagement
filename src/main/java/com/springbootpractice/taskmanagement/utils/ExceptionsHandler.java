@@ -42,10 +42,10 @@ public class ExceptionsHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CustomResponse<>("Unauthorized", null, err.getMessage()));
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ResponseEntity<?>> handleBadCredentialsException(BadCredentialsException err) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
-    }
+//    @ExceptionHandler(BadCredentialsException.class)
+//    public ResponseEntity<ResponseEntity<?>> handleBadCredentialsException(BadCredentialsException err) {
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
+//    }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ResponseEntity<?>> handleBadCredentialsException(ExpiredJwtException err) {

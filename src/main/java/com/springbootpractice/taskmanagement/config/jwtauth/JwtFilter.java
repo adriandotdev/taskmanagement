@@ -11,16 +11,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtUserDetailService jwtUserDetailService;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private JwtService jwtService;
@@ -33,10 +35,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
         var authHeader = request.getHeader("Authorization");
 
+        if (authHeader == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         var type = authHeader.split(" ")[0];
         var token = authHeader.split(" ")[1];
 
-        if (!type.equals("Bearer") || authHeader.isEmpty() || token.isEmpty()) {
+        if (!type.equals("Bearer") || token.isEmpty()) {
 
             filterChain.doFilter(request, response);
             return;
@@ -56,8 +63,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() != null) {
 
-            JwtUserDetail jwtUserDetail = (JwtUserDetail) this.jwtUserDetailService.loadUserByUsername(username);
+            JwtUserDetail jwtUserDetail = (JwtUserDetail) this.userDetailsService.loadUserByUsername(username);
 
+            System.out.println("JWT USER DETAIL: " + jwtUserDetail.getUsername());
             if (jwtService.isTokenValid(jwtUserDetail, token)) {
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(jwtUserDetail, null, jwtUserDetail.getAuthorities());

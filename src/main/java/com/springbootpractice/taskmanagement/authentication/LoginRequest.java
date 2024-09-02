@@ -1,4 +1,13 @@
 package com.springbootpractice.taskmanagement.authentication;
 
-public record LoginRequest(String username, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginRequest(
+
+        @NotBlank
+        String username,
+
+        @NotBlank
+        String password
+) {
 }

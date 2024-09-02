@@ -2,15 +2,10 @@ package com.springbootpractice.taskmanagement.authentication;
 
 import com.springbootpractice.taskmanagement.config.jwtauth.JwtService;
 import com.springbootpractice.taskmanagement.config.jwtauth.JwtUserDetail;
-import com.springbootpractice.taskmanagement.utils.HttpUnauthorized;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthenticationService {

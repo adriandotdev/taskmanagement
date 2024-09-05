@@ -1,5 +1,6 @@
 package com.springbootpractice.taskmanagement.config.SecurityConfig;
 
+import com.springbootpractice.taskmanagement.config.basicauth.CustomFilter;
 import com.springbootpractice.taskmanagement.config.jwtauth.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,9 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
 
+    @Autowired
+    private CustomFilter customFilter;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -36,7 +40,8 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtFilter, CustomFilter.class);
 
         return http.build();
     }

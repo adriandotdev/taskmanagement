@@ -1,6 +1,7 @@
 package com.springbootpractice.taskmanagement.utils;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.ServletException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,10 +43,10 @@ public class ExceptionsHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CustomResponse<>("Unauthorized", null, err.getMessage()));
     }
 
-//    @ExceptionHandler(BadCredentialsException.class)
-//    public ResponseEntity<ResponseEntity<?>> handleBadCredentialsException(BadCredentialsException err) {
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
-//    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<CustomResponse<?>> handleBadCredentialsException(BadCredentialsException err) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new CustomResponse<>(HttpStatus.UNAUTHORIZED.toString(), err.getMessage(), err.getMessage()));
+    }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ResponseEntity<?>> handleBadCredentialsException(ExpiredJwtException err) {

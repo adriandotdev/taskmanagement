@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 
 @RestControllerAdvice
@@ -51,5 +52,10 @@ public class ExceptionsHandler {
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ResponseEntity<?>> handleBadCredentialsException(ExpiredJwtException err) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseEntity<>("TOKEN_EXPIRED", HttpStatus.UNAUTHORIZED));
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<CustomResponse<?>> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
+        return ResponseEntity.badRequest().body(new CustomResponse<>("BAD REQUEST", null, e.getMessage()));
     }
 }

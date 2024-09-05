@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class JwtService {
@@ -26,11 +29,30 @@ public class JwtService {
     }
 
     public String generateToken(JwtUserDetail user) {
+        Map<String, String> newClaims = new HashMap<>();
+        newClaims.put("typ", "access");
+
         return Jwts
                 .builder()
                 .setSubject(user.getUsername())
                 .setIssuer(ISSUER)
+                .setClaims(newClaims)
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshToken(JwtUserDetail user) {
+        Map<String, String> newClaims = new HashMap<>();
+        newClaims.put("typ", "refresh");
+
+        final long refreshTokenExpiration = 1000L * 60 * 60 * 24 * 30;
+        return Jwts
+                .builder()
+                .setSubject(user.getUsername())
+                .setIssuer(ISSUER)
+                .setClaims(newClaims)
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

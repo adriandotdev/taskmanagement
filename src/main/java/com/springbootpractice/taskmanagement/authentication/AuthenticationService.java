@@ -9,6 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Service
 public class AuthenticationService {
 
@@ -37,12 +39,20 @@ public class AuthenticationService {
         this.repository.insertUserDetails(userID, request);
     }
 
-    public String login(LoginRequest request) {
+    public HashMap<String, ?> login(LoginRequest request) {
 
 //        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
+
         JwtUserDetail jwtUserDetail = this.repository.getUserByUsername(request.username()).orElseThrow(() -> new BadCredentialsException("INVALID_CREDENTIALS"));
 
-        return jwtService.generateToken(jwtUserDetail);
+        var accessToken = jwtService.generateToken(jwtUserDetail);
+        var refreshToken = jwtService.generateRefreshToken(jwtUserDetail);
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("access_token", accessToken);
+        map.put("refresh_token", refreshToken);
+
+        return map;
     }
 }

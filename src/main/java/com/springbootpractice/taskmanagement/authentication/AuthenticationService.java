@@ -41,8 +41,7 @@ public class AuthenticationService {
 
     public HashMap<String, ?> login(LoginRequest request) {
 
-//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
-
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
         JwtUserDetail jwtUserDetail = this.repository.getUserByUsername(request.username()).orElseThrow(() -> new BadCredentialsException("INVALID_CREDENTIALS"));
 

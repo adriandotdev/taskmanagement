@@ -1,11 +1,17 @@
 package com.springbootpractice.taskmanagement.config.jwtauth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springbootpractice.taskmanagement.config.basicauth.CustomFilter;
+import com.springbootpractice.taskmanagement.utils.CustomResponse;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -20,6 +26,8 @@ import java.io.IOException;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
+    private static final Logger logger =  LoggerFactory.getLogger(JwtFilter.class);
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -54,18 +62,32 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUsername(token);
         }
-        catch(ExpiredJwtException err) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "JWT_TOKEN_EXPIRED");
+        catch(ExpiredJwtException e) {
+            logger.error("JWT_TOKEN_EXPIRED");
+            response.setContentType("application/json");
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            ObjectMapper mapper = new ObjectMapper();
+            response.getWriter().write(   mapper.writeValueAsString(new CustomResponse<>("EXPIRED_TOKEN", null, e.getMessage())));
         }
         catch (Exception e) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "INVALID_TOKEN");
+            logger.error("INVALID_TOKEN");
+            response.setContentType("application/json");
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            ObjectMapper mapper = new ObjectMapper();
+            response.getWriter().write(   mapper.writeValueAsString(new CustomResponse<>("INVALID_TOKEN", null, e.getMessage())));
         }
 
-        if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() != null) {
+        logger.info("JWT HERE");
+        logger.info("USERNAME: {}", username);
+        logger.info("AUTHENTICATION CONTEXT: {}", SecurityContextHolder.getContext().getAuthentication());
+        if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
 
+            logger.info("VALID JWT");
             JwtUserDetail jwtUserDetail = (JwtUserDetail) this.userDetailsService.loadUserByUsername(username);
 
             System.out.println("JWT USER DETAIL: " + jwtUserDetail.getUsername());
+            System.out.println(jwtService.isTokenValid(jwtUserDetail, token));
+
             if (jwtService.isTokenValid(jwtUserDetail, token)) {
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(jwtUserDetail, null, jwtUserDetail.getAuthorities());
@@ -75,5 +97,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
+        filterChain.doFilter(request, response);
     }
 }

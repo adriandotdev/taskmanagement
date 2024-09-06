@@ -39,6 +39,14 @@ public class CustomFilter extends OncePerRequestFilter {
            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        final String requestURI = request.getRequestURI();
+
+        if (requestURI.startsWith("/api/v1/users")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             var authHeader = request.getHeader("Authorization");
 

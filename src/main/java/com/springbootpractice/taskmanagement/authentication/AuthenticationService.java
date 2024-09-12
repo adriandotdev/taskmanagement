@@ -41,10 +41,11 @@ public class AuthenticationService {
 
     public HashMap<String, ?> login(LoginRequest request) {
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
-
         JwtUserDetail jwtUserDetail = this.repository.getUserByUsername(request.username()).orElseThrow(() -> new BadCredentialsException("INVALID_CREDENTIALS"));
 
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password(), jwtUserDetail.getAuthorities()));
+
+        System.out.println("ROLE SERVICE: " + jwtUserDetail.getAuthorities());
         var accessToken = jwtService.generateToken(jwtUserDetail);
         var refreshToken = jwtService.generateRefreshToken(jwtUserDetail);
 
